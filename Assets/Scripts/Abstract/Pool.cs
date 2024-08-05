@@ -39,6 +39,11 @@ public abstract class Pool<T> where T : Component
         return _pool.Get();
     }
 
+    public void Release(T instance)
+    {
+        _pool.Release(instance);
+    }
+
     protected virtual void OnGet(T instance)
     {
         instance.transform.position = _nextSpawnPosition;

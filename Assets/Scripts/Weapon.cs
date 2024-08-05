@@ -4,6 +4,7 @@ using Zenject;
 public class Weapon : MonoBehaviour
 {
     private const float ScreenCenterPercent = 0.5f;
+    private const float MaxShootDistance = 100f;
 
     [SerializeField] private Transform _muzzleEnd;
     [SerializeField] private int _startingBullets;
@@ -22,7 +23,7 @@ public class Weapon : MonoBehaviour
 
     private void Start()
     {
-        _bulletsInInventory = _maxBulletsInMagazine;
+        _bulletsInInventory = _startingBullets;
         _bulletsInInventory -= _maxBulletsInMagazine;
         _bulletsInMagazine = _maxBulletsInMagazine;
     }
@@ -35,8 +36,10 @@ public class Weapon : MonoBehaviour
         }
 
         Bullet bullet = _bulletPool.Get(_muzzleEnd.position, _muzzleEnd.rotation.eulerAngles);
-        Vector3 target = _camera.ViewportToWorldPoint(new Vector3(ScreenCenterPercent, ScreenCenterPercent, 0));
-        bullet.transform.LookAt(_camera.ViewportToWorldPoint(target));
+        Vector3 target = _camera.ViewportPointToRay(new Vector3(ScreenCenterPercent, ScreenCenterPercent, 0)).GetPoint(MaxShootDistance);
+        bullet.transform.LookAt(target);
+
+        _bulletsInMagazine--;
     }
 
     public void Reload()
@@ -50,8 +53,8 @@ public class Weapon : MonoBehaviour
         }
         else
         {
-            bulletsToLoad = _maxBulletsInMagazine;
-            _bulletsInInventory -= _maxBulletsInMagazine;
+            bulletsToLoad = _maxBulletsInMagazine - _bulletsInMagazine;
+            _bulletsInInventory -= bulletsToLoad;
         }
 
         _bulletsInMagazine += bulletsToLoad;

@@ -21,7 +21,7 @@ public class InputReader : MonoBehaviour
 
     private void Update()
     {
-        Vector2 view = new Vector2(Input.GetAxisRaw(MouseX), Input.GetAxisRaw(MouseY)).normalized;
+        Vector2 view = new Vector2(Input.GetAxis(MouseX), Input.GetAxis(MouseY));
         Looked?.Invoke(view);
 
         Vector2 movement = new Vector2(Input.GetAxisRaw(Horizontal), Input.GetAxisRaw(Vertical)).normalized;
@@ -29,7 +29,7 @@ public class InputReader : MonoBehaviour
 
         foreach (KeyCode keyCode in _jumpKeys)
         {
-            if (Input.GetKey(keyCode))
+            if (Input.GetKeyDown(keyCode))
             {
                 Jumped?.Invoke();
             }
@@ -37,7 +37,7 @@ public class InputReader : MonoBehaviour
 
         foreach (KeyCode keyCode in _shootingKeys)
         {
-            if (Input.GetKey(keyCode))
+            if (Input.GetKeyDown(keyCode))
             {
                 Shot?.Invoke();
             }
@@ -45,7 +45,7 @@ public class InputReader : MonoBehaviour
 
         foreach (KeyCode keyCode in _reloadKeys)
         {
-            if (Input.GetKey(keyCode))
+            if (Input.GetKeyDown(keyCode))
             {
                 Reloaded?.Invoke();
             }

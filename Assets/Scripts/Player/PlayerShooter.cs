@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerShooter : MonoBehaviour
 {
-    private Weapon _weapon;
+    [SerializeField] private Weapon _weapon;
 
     public void Shoot()
     {
