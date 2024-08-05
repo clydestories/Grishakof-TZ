@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.Pool;
+using Zenject;
 
 public abstract class Pool<T> where T : Component
 {
+    [Inject] private DiContainer _diContainer;
     private T _prefab;
     private int _defaultCapacity;
     private int _maxSize;
@@ -53,7 +55,7 @@ public abstract class Pool<T> where T : Component
 
     private T OnCreate()
     {
-        return Object.Instantiate(_prefab);
+        return _diContainer.InstantiatePrefab(_prefab).GetComponent<T>();
     }
 
     private void OnRelease(T instance)

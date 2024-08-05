@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 public class Weapon : MonoBehaviour
 {
@@ -9,8 +10,8 @@ public class Weapon : MonoBehaviour
     [SerializeField] private int _maxBulletsInMagazine;
     [SerializeField] private float _damage;
 
+    [Inject] private BulletPool _bulletPool;
     private Camera _camera;
-    private BulletPool _bulletPool;
     private int _bulletsInMagazine;
     private int _bulletsInInventory;
 
@@ -40,10 +41,19 @@ public class Weapon : MonoBehaviour
 
     public void Reload()
     {
-        if (true)
+        int bulletsToLoad;
+
+        if (_bulletsInInventory <= _maxBulletsInMagazine)
         {
-            _bulletsInInventory -= _maxBulletsInMagazine;
-            _bulletsInMagazine = _maxBulletsInMagazine;
+            bulletsToLoad = _bulletsInInventory;
+            _bulletsInInventory = 0;
         }
+        else
+        {
+            bulletsToLoad = _maxBulletsInMagazine;
+            _bulletsInInventory -= _maxBulletsInMagazine;
+        }
+
+        _bulletsInMagazine += bulletsToLoad;
     }
 }
