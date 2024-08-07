@@ -1,18 +1,42 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
+[RequireComponent (typeof(NavMeshAgent))]
 public class EnemyMover : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private List<Transform> _points;
+
+    private NavMeshAgent _agent;
+    private Transform _target;
+
+    private void Awake()
     {
-        
+        _agent = GetComponent<NavMeshAgent>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        PickNewPoint();
+        Move();
+    }
+
+    private void Update()
+    {
+        if (_agent.remainingDistance < _agent.stoppingDistance)
+        {
+            PickNewPoint();
+            Move();
+        }
+    }
+
+    public void Move()
+    {
+        _agent.SetDestination(_target.position);
+    }
+
+    public void PickNewPoint()
+    {
+        _target = _points[Random.Range(0, _points.Count)];
     }
 }

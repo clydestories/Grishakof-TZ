@@ -13,9 +13,9 @@ public class PlayerLooker : MonoBehaviour
 
     private void Start()
     {
-        _camera.transform.rotation = Quaternion.identity;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        _camera.transform.rotation = Quaternion.identity;
     }
 
     public void Look(Vector2 direction)

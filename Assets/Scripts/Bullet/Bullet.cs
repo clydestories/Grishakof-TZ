@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using Zenject;
 
 [RequireComponent (typeof(Rigidbody), typeof(Collider))]
 public class Bullet : MonoBehaviour
@@ -9,10 +8,11 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private float _selfDestructDelay;
 
-    [Inject] private BulletPool _pool;
     private Rigidbody _rigidbody;
     private Coroutine _selfDestruction;
     private float _damage = 0;
+
+    public event Action<Bullet> Destructing;
 
     private void Awake()
     {
@@ -46,7 +46,7 @@ public class Bullet : MonoBehaviour
             health.TakeDamage(_damage);
         }
 
-        _pool.Release(this);
+        Destructing?.Invoke(this);
     }
 
     public void Construct(float damage)
@@ -57,7 +57,7 @@ public class Bullet : MonoBehaviour
     private IEnumerator SeftDestructing()
     {
         yield return new WaitForSeconds(_selfDestructDelay);
-        _pool.Release(this);
+        Destructing?.Invoke(this);
         _selfDestruction = null;
     }
 }

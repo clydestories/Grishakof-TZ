@@ -7,6 +7,7 @@ public abstract class Health : MonoBehaviour
 
     private float _value;
 
+    public event Action<float, float> ValueChanged;
     public event Action Died;
 
     public float Value
@@ -34,6 +35,7 @@ public abstract class Health : MonoBehaviour
         }
 
         Value -= amount;
+        ValueChanged?.Invoke(Value, _maxHealth);
 
         if (Value == 0)
         {
@@ -49,6 +51,7 @@ public abstract class Health : MonoBehaviour
         }
 
         Value += amount;
+        ValueChanged?.Invoke(Value, _maxHealth);
     }
 
     private void Die()

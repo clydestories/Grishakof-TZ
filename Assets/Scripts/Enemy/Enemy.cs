@@ -1,18 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent (typeof(EnemyHealth), typeof(EnemyMover))]
 public class Enemy : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private EnemyHealth _health;
+
+    private void Awake()
     {
-        
+        _health = GetComponent<EnemyHealth>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-        
+        _health.Died += Die;
+    }
+
+    private void OnDisable()
+    {
+        _health.Died -= Die;
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }
